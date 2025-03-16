@@ -18,13 +18,13 @@ namespace School_Bus_Api.Controllers
             _busRepository = busRepository;
         }
 
-        [HttpGet]
+        [HttpGet("get/all")]
         public ActionResult<List<BusShowDataDto>> GetBuses()
         {
             return Ok(new {Bus = _busRepository.GetAllBuses()});
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public ActionResult<BusDto> GetBus(int id)
         {
             var bus = _busRepository.GetBusById(id);
@@ -34,7 +34,7 @@ namespace School_Bus_Api.Controllers
             return Ok(new {Bus = bus});
         }
 
-        [HttpPost]
+        [HttpPost("Add")]
         public IActionResult CreateBus([FromBody] BusDto busDto)
         {
             var buses = _busRepository.GetAllBuses().Any(b => b.BusCode == busDto.BusCode);
@@ -46,7 +46,7 @@ namespace School_Bus_Api.Controllers
             return Created();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("Put/{id}")]
         public IActionResult UpdateBus(int id, [FromBody] BusDto busDto)
         {
             var existingBus = _busRepository.GetBusById(id);
@@ -59,7 +59,7 @@ namespace School_Bus_Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("Delete/{id}")]
         public IActionResult DeleteBus(int id)
         {
             if (_busRepository.GetBusById(id) == null)

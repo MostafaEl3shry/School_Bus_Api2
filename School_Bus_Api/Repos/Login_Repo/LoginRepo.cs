@@ -12,7 +12,6 @@ namespace School_Bus_Api.Repos.Login_Repo
         }
         public bool Login(string Email, string password)
         {
-            var status = false;
             var login = _context.registrations.FirstOrDefault(x => x.studentEmail == Email && x.Password == password);
             if (login != null)
             {

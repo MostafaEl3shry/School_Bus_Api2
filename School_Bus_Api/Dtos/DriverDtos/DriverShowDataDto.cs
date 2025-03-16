@@ -8,6 +8,7 @@
         public string DriverPhoneNumber { get; set; }
         public string DriverAddress { get; set; }
         public string DriverID { get; set; }
+        public string DriverImg { get; set; }
         public int BusCode { get; set; }
     }
 }

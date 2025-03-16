@@ -11,6 +11,8 @@ namespace School_Bus_Api.Repos.Driver_Repo
         DriverAddDataDto UpdateDriver(int id, DriverAddDataDto driverDto);
         bool DeleteDriver(int id);
         bool BusExists(int busCode);
+
+        string UploadImage(int userId,IFormFile file);
     }
 
 

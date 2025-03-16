@@ -33,6 +33,8 @@ namespace School_Bus_Api.Model
         [MaxLength(14)]
         public string DriverID { get; set; }
 
+        public string? DriverImg { get; set; }
+
         [Required]
         //[Range(1, 5, ErrorMessage = "Code Must Be between 1 and 5 Numbers")]
         public int BusCode { get; set; }

@@ -24,6 +24,7 @@ namespace School_Bus_Api.Repos.Driver_Repo
                 DriverPhoneNumber = d.DriverPhoneNumber,
                 DriverAddress = d.DriverAddress,
                 DriverID = d.DriverID,
+                DriverImg = d.DriverImg,
                 BusCode = d.busModel.BusCode,
             }).ToList();
             return driver;
@@ -41,6 +42,7 @@ namespace School_Bus_Api.Repos.Driver_Repo
                 DriverPhoneNumber = driver.DriverPhoneNumber,
                 DriverAddress = driver.DriverAddress,
                 DriverID = driver.DriverID,
+                DriverImg = driver.DriverImg,
                 BusCode = driver.busModel.BusCode,
             };
             return driverDto;
@@ -112,6 +114,40 @@ namespace School_Bus_Api.Repos.Driver_Repo
         public bool BusExists(int busCode)
         {
             return _context.buses.Any(b => b.BusCode == busCode);
+        }
+
+
+        string IDriverRepo.UploadImage(int userId, IFormFile file)
+        {
+           var driver = _context.drivers.FirstOrDefault(x=>x.Id == userId);
+            if (driver == null)
+            {
+                throw new FileNotFoundException("Driver Not Found");
+            }
+
+            if (file == null && file.Length == 0)
+            {
+                throw new BadHttpRequestException("No File Uploaded");
+            }
+
+            var UploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+            if (!Directory.Exists(UploadFolder))
+            {
+                Directory.CreateDirectory(UploadFolder);
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + "_" + file.FileName;
+            var filePath = Path.Combine(UploadFolder, uniqueFileName);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(fileStream);
+            }
+
+            driver.DriverImg = uniqueFileName;
+            _context.drivers.Update(driver);
+            _context.SaveChanges();
+            return filePath;
         }
     }
 

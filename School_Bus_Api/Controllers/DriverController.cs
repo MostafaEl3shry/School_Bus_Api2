@@ -17,7 +17,7 @@ namespace School_Bus_Api.Controllers
             _repository = repository;
         }
 
-        [HttpGet]
+        [HttpGet("get/all")]
         public ActionResult<List<DriverShowDataDto>> GetAllDrivers()
         {
             var drivers = _repository.GetAllDrivers();
@@ -28,7 +28,7 @@ namespace School_Bus_Api.Controllers
             return Ok(new {drivers = drivers});
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("get/{id}")]
         public ActionResult<DriverShowDataDto> GetDriverById(int id)
         {
             var driver = _repository.GetDriverById(id);
@@ -38,7 +38,7 @@ namespace School_Bus_Api.Controllers
             return Ok(new {Drivers = driver});
         }
 
-        [HttpPost]
+        [HttpPost("post")]
         public ActionResult<DriverAddDataDto> AddDriver(DriverAddDataDto driverDto)
         {
             if (!_repository.BusExists(driverDto.BusCode))
@@ -51,7 +51,29 @@ namespace School_Bus_Api.Controllers
             return Created();
         }
 
-        [HttpPut("{id}")]
+        [HttpPost("upload")]
+        public IActionResult UploadImage([FromForm]UploadImageDto dto)
+        {
+            try
+            {
+                var filePath = _repository.UploadImage(dto.DriverId, dto.File);
+                return Ok(new { message = "File uploaded successfully.", filePath });
+            }
+            catch (FileNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (BadHttpRequestException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500,e.Message);
+            }
+        }
+
+        [HttpPut("put/{id}")]
         public IActionResult UpdateDriver(int id, DriverAddDataDto driverDto)
         {
             var driver = _repository.GetDriverById(id);
@@ -62,7 +84,7 @@ namespace School_Bus_Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("delete/{id}")]
         public IActionResult DeleteDriver(int id)
         {
             var deleted = _repository.DeleteDriver(id);

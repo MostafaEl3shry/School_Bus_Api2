@@ -16,14 +16,14 @@ namespace School_Bus_Api.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login([FromBody]string email,string password)
+        public IActionResult Login(string email,string password)
         {
             var l = _Repo.Login(email, password);
             if(l == null)
             {
                 return NoContent();
             }
-            return Ok(l);
+            return Ok(new { status = l });
         }
     }
 }

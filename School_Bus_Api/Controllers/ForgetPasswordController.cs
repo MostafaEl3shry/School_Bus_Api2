@@ -15,14 +15,14 @@ namespace School_Bus_Api.Controllers
             _repo = repo;
         }
 
-        [HttpPut]
+        [HttpPut("put")]
         public IActionResult UpdatePassword([FromBody] ForgetPasswordDto dto, int id)
         {
             _repo.ForgetPassword(dto, id);
             return Ok();
         }
 
-        [HttpGet]
+        [HttpGet("get/all")]
         public IActionResult Get()
         {
             return Ok(_repo.GetAll());
